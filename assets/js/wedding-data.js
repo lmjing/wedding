@@ -87,14 +87,21 @@ const weddingData = {
 
   // 갤러리 이미지 (배열)
   gallery_images: [
-    "assets/images/gallery_webp/20250918_004953_05_CJG00205-.webp",
-    "assets/images/gallery_webp/20250918_005020_08_CJG00583-.webp",
-    "assets/images/gallery_webp/20250918_011644_12_CJG01164-.webp",
-    "assets/images/gallery_webp/20250918_011652_14_CJG01310-.webp",
-    "assets/images/gallery_webp/20250918_011658_22_CJG01695-.webp",
-    "assets/images/gallery_webp/20250918_011702_24_CJG01721-.webp",
-    "assets/images/gallery_webp/20250918_235444_IMG_3173.webp",
-    "assets/images/gallery_webp/20250919_074549_1754745093144.webp",
+    "assets/images/20250918_225238_2.png",
+    "assets/images/20250918_225238_2.png",
+    "assets/images/20250918_225238_2.png",
+    "assets/images/20250918_225238_2.png",
+    "assets/images/gallery_webp/1.jpg",
+    "assets/images/gallery_webp/2.jpg",
+    "assets/images/gallery_webp/3.jpg",
+    // "assets/images/gallery_webp/20250918_004953_05_CJG00205-.webp",
+    // "assets/images/gallery_webp/20250918_005020_08_CJG00583-.webp",
+    // "assets/images/gallery_webp/20250918_011644_12_CJG01164-.webp",
+    // "assets/images/gallery_webp/20250918_011652_14_CJG01310-.webp",
+    // "assets/images/gallery_webp/20250918_011658_22_CJG01695-.webp",
+    // "assets/images/gallery_webp/20250918_011702_24_CJG01721-.webp",
+    // "assets/images/gallery_webp/20250918_235444_IMG_3173.webp",
+    // "assets/images/gallery_webp/20250919_074549_1754745093144.webp",
   ],
 
   // 메타 정보

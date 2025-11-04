@@ -726,10 +726,113 @@ function updateCountdownDisplay(days, hours, minutes, seconds) {
   }
 }
 
-// 갤러리 초기화 - HTML에 직접 설정되어 있으므로 비활성화
+// 갤러리 초기화
 function initGallery() {
-  console.log("🖼️ 갤러리는 HTML에 직접 설정되어 있습니다");
-  // HTML에 직접 배경 이미지가 설정되어 있으므로 JavaScript 처리 불필요
+  console.log("🖼️ 갤러리 초기화 시작...");
+
+  const galleryGrid = document.getElementById("gallery-grid");
+  if (!galleryGrid) {
+    console.warn("⚠️ 갤러리 그리드를 찾을 수 없습니다.");
+    return;
+  }
+
+  // wedding-data.js에서 갤러리 이미지 가져오기
+  if (
+    typeof weddingData !== "undefined" &&
+    weddingData.gallery_images &&
+    weddingData.gallery_images.length > 0
+  ) {
+    console.log(
+      `🖼️ ${weddingData.gallery_images.length}개의 갤러리 이미지 발견`
+    );
+
+    // 기존 갤러리 아이템 제거
+    galleryGrid.innerHTML = "";
+
+    // 갤러리 이미지 동적 생성
+    let loadedCount = 0;
+    let errorCount = 0;
+
+    weddingData.gallery_images.forEach((imagePath, index) => {
+      if (!imagePath || imagePath.trim() === "") {
+        console.warn(`⚠️ 갤러리 이미지 ${index + 1}: 빈 경로`);
+        return;
+      }
+
+      const item = document.createElement("div");
+      item.className = "item";
+      item.setAttribute("onclick", `openImageModal('${imagePath}')`);
+
+      // 기본 스타일 설정 (높이 명시)
+      item.style.cssText = `
+        background-image: url('${imagePath}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 200px;
+        height: 200px;
+        width: 100%;
+        cursor: pointer;
+        display: block;
+        visibility: visible;
+        opacity: 0.5;
+        transition: opacity 0.3s ease;
+      `;
+
+      // 이미지 로드 확인
+      const img = new Image();
+      img.onload = function () {
+        loadedCount++;
+        console.log(
+          `✅ 이미지 로드 성공 (${loadedCount}/${weddingData.gallery_images.length}): ${imagePath}`
+        );
+        // 로드 성공 시 opacity를 1로 변경 (CSS의 !important를 덮어쓰기 위해 인라인 스타일 강제)
+        item.setAttribute(
+          "style",
+          item.style.cssText.replace("opacity: 0.5", "opacity: 1 !important")
+        );
+        item.style.setProperty("opacity", "1", "important");
+      };
+      img.onerror = function () {
+        errorCount++;
+        console.error(`❌ 이미지 로드 실패 (${errorCount}): ${imagePath}`);
+        // 로드 실패 시 회색 배경과 텍스트 표시
+        item.style.cssText = `
+          background-color: #f0f0f0 !important;
+          background-image: none !important;
+          min-height: 200px;
+          height: 200px;
+          width: 100%;
+          cursor: pointer;
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.5 !important;
+        `;
+        item.innerHTML = `<div style="color: #999; font-size: 12px;">이미지 없음</div>`;
+      };
+
+      // 이미지 로드 시작
+      img.src = imagePath;
+
+      galleryGrid.appendChild(item);
+    });
+
+    // 로드 완료 후 로그
+    setTimeout(() => {
+      console.log(
+        `✅ 갤러리 이미지 동적 생성 완료 (성공: ${loadedCount}, 실패: ${errorCount})`
+      );
+      if (errorCount > 0) {
+        console.warn(
+          `⚠️ ${errorCount}개의 이미지 로드 실패. 경로를 확인해주세요.`
+        );
+      }
+    }, 1000);
+  } else {
+    console.warn("⚠️ 갤러리 이미지가 설정되지 않았습니다.");
+    console.warn("wedding-data.js의 gallery_images 배열을 확인해주세요.");
+  }
 }
 
 // 방명록 초기화
