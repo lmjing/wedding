@@ -11,8 +11,232 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeWebsite();
 });
 
+// 결혼식 데이터를 DOM에 주입
+function injectWeddingData() {
+    if (typeof weddingData === 'undefined') {
+        console.warn('weddingData가 정의되지 않았습니다. wedding-data.js 파일을 확인해주세요.');
+        return;
+    }
+    
+    const data = weddingData;
+    const info = data.wedding_info;
+    const family = data.family_info;
+    const messages = data.messages;
+    const images = data.images;
+    const transport = data.transportation;
+    const mapSettings = data.map_settings;
+    const accounts = data.account_info;
+    const contacts = data.contacts;
+    
+    // 페이지 제목 및 메타 정보
+    const pageTitle = generatePageTitle();
+    const pageDescription = generatePageDescription();
+    const ogImage = data.meta.thumbnail || images.main_photo || 'assets/images/main-photo.jpg';
+    
+    document.title = pageTitle;
+    updateMetaTag('og:title', pageTitle);
+    updateMetaTag('og:description', pageDescription);
+    updateMetaTag('og:image', ogImage);
+    updateMetaTag('twitter:title', pageTitle);
+    updateMetaTag('twitter:description', pageDescription);
+    updateMetaTag('twitter:image', ogImage);
+    
+    // 신랑/신부 이름
+    updateTextContent('.groom', info.groom_name);
+    updateTextContent('.bride', info.bride_name);
+    
+    // 날짜/시간/장소
+    updateTextContent('.datetime', info.wedding_date);
+    const timeEl = document.querySelector('.datetime span');
+    if (timeEl) timeEl.textContent = info.wedding_time;
+    const venueEl = document.querySelector('.datetime div');
+    if (venueEl) venueEl.textContent = info.wedding_venue;
+    
+    // 메인 사진
+    const mainPhotoEl = document.querySelector('.intro-blend-image');
+    if (mainPhotoEl && images.main_photo) {
+        mainPhotoEl.src = images.main_photo;
+        mainPhotoEl.alt = `${info.groom_name} ${info.bride_name} 사진`;
+    }
+    
+    // 시 한구절
+    if (messages.poem_message) {
+        const poemEl = document.querySelector('.paragraph-wrap .text div');
+        if (poemEl) poemEl.textContent = messages.poem_message;
+    }
+    
+    // 초대장 메시지
+    if (messages.invitation_message) {
+        const invitationEl = document.querySelector('.greetings-wrap .text.center div');
+        if (invitationEl) invitationEl.textContent = messages.invitation_message;
+    }
+    
+    // 초대장 이미지
+    if (images.invitation_photo) {
+        const invitationMediaEl = document.querySelector('.greetings-wrap .image');
+        if (invitationMediaEl) {
+            invitationMediaEl.innerHTML = `<img src="${images.invitation_photo}" alt="초대장" style="width: 100%; height: auto;">`;
+        }
+    }
+    
+    // 가족 소개
+    const membersWrap = document.querySelector('.members-wrap');
+    if (membersWrap) {
+        const groomFamily = membersWrap.querySelector('div:first-child');
+        const brideFamily = membersWrap.querySelector('div:last-child');
+        if (groomFamily) {
+            groomFamily.innerHTML = `
+                <span><span>${family.groom_father} <span>·</span></span> <span>${family.groom_mother}</span></span>
+                <span class="relation"><span>의</span> <span>아들</span></span>
+                <span class="lname">${info.groom_name}</span>
+            `;
+        }
+        if (brideFamily) {
+            brideFamily.innerHTML = `
+                <span><span>${family.bride_father} <span>·</span></span> <span>${family.bride_mother}</span></span>
+                <span class="relation"><span>의</span> <span>딸</span></span>
+                <span class="lname">${info.bride_name}</span>
+            `;
+        }
+    }
+    
+    // 지도 이미지
+    if (mapSettings.mapImage) {
+        const mapContainer = document.getElementById('zoomable-map');
+        if (mapContainer) {
+            mapContainer.innerHTML = `<img src="${mapSettings.mapImage}" alt="지도" style="width: 100%; height: auto; border-radius: 6px;">`;
+        }
+    }
+    
+    // 교통 정보
+    if (mapSettings.subwayInfo || transport.subway) {
+        const subwayEl = document.querySelector('.waytocome-wrap .box:first-child .content div');
+        if (subwayEl) subwayEl.textContent = mapSettings.subwayInfo || transport.subway;
+    }
+    if (mapSettings.busInfo || transport.bus) {
+        const busEl = document.querySelector('.waytocome-wrap .box:nth-child(2) .content div');
+        if (busEl) busEl.textContent = mapSettings.busInfo || transport.bus;
+    }
+    if (mapSettings.parkingInfo || transport.parking) {
+        const parkingEl = document.querySelector('.waytocome-wrap .box:last-child .content div');
+        if (parkingEl) parkingEl.textContent = mapSettings.parkingInfo || transport.parking;
+    }
+    
+    // 계좌 정보
+    const accountWrap = document.querySelector('.c-account');
+    if (accountWrap) {
+        // 신랑측 계좌
+        const groomAccountItem = accountWrap.querySelector('.item:first-child');
+        if (groomAccountItem && accounts.groom_accounts.length > 0) {
+            const textContainers = groomAccountItem.querySelectorAll('.text.gothic');
+            textContainers.forEach((container, index) => {
+                if (accounts.groom_accounts[index]) {
+                    const account = accounts.groom_accounts[index];
+                    const inner = container.querySelector('.inner');
+                    const btn = container.querySelector('.btn-action');
+                    if (inner) {
+                        inner.innerHTML = `
+                            <span><span class="bank">${account.bank}</span> <span>${account.number}</span></span><br>
+                            <span>${account.name}</span>
+                        `;
+                    }
+                    if (btn) {
+                        btn.setAttribute('onclick', `copyAccount('${account.bank} ${account.number} ${account.name}')`);
+                    }
+                }
+            });
+        }
+        
+        // 신부측 계좌
+        const brideAccountItem = accountWrap.querySelector('.item:last-child');
+        if (brideAccountItem && accounts.bride_accounts.length > 0) {
+            const textContainers = brideAccountItem.querySelectorAll('.text.gothic');
+            textContainers.forEach((container, index) => {
+                if (accounts.bride_accounts[index]) {
+                    const account = accounts.bride_accounts[index];
+                    const inner = container.querySelector('.inner');
+                    const btn = container.querySelector('.btn-action');
+                    if (inner) {
+                        inner.innerHTML = `
+                            <span><span class="bank">${account.bank}</span> <span>${account.number}</span></span><br>
+                            <span>${account.name}</span>
+                        `;
+                    }
+                    if (btn) {
+                        btn.setAttribute('onclick', `copyAccount('${account.bank} ${account.number} ${account.name}')`);
+                    }
+                }
+            });
+        }
+    }
+    
+    // 연락처 정보
+    const contactModal = document.getElementById('contact-modal');
+    if (contactModal) {
+        const groomNameEl = contactModal.querySelector('.contact-person:first-child .contact-name');
+        const groomPhoneEl = contactModal.querySelector('.contact-person:first-child .call-btn');
+        const groomSmsEl = contactModal.querySelector('.contact-person:first-child .sms-btn');
+        if (groomNameEl) groomNameEl.textContent = contacts.groom.name;
+        if (groomPhoneEl) groomPhoneEl.href = `tel:${contacts.groom.phone.replace(/-/g, '')}`;
+        if (groomSmsEl) groomSmsEl.href = `sms:${contacts.groom.phone.replace(/-/g, '')}`;
+        
+        const brideNameEl = contactModal.querySelector('.contact-person:last-child .contact-name');
+        const bridePhoneEl = contactModal.querySelector('.contact-person:last-child .call-btn');
+        const brideSmsEl = contactModal.querySelector('.contact-person:last-child .sms-btn');
+        if (brideNameEl) brideNameEl.textContent = contacts.bride.name;
+        if (bridePhoneEl) bridePhoneEl.href = `tel:${contacts.bride.phone.replace(/-/g, '')}`;
+        if (brideSmsEl) brideSmsEl.href = `sms:${contacts.bride.phone.replace(/-/g, '')}`;
+    }
+    
+    // 마무리 메시지
+    if (messages.outro_message) {
+        const outroEl = document.querySelector('.c-outro-text.center div');
+        if (outroEl) outroEl.textContent = messages.outro_message.replace(/\n/g, '<br>');
+    }
+    
+    // 마무리 이미지
+    if (images.outro_photo) {
+        const outroMediaEl = document.querySelector('.c-outro-inner');
+        if (outroMediaEl) {
+            const existingMedia = outroMediaEl.querySelector('img, video');
+            if (!existingMedia) {
+                const img = document.createElement('img');
+                img.src = images.outro_photo;
+                img.alt = '마무리';
+                img.style.cssText = 'width: 100%; height: auto;';
+                outroMediaEl.insertBefore(img, outroMediaEl.firstChild);
+            }
+        }
+    }
+    
+    // 갤러리 이미지 (이미 하드코딩되어 있으므로 필요시 동적으로 업데이트 가능)
+    // 갤러리는 initGallery()에서 처리하므로 여기서는 생략
+}
+
+// 헬퍼 함수들
+function updateTextContent(selector, text) {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = text;
+}
+
+function updateMetaTag(property, content) {
+    const selector = property.startsWith('og:') ? `meta[property="${property}"]` : `meta[name="${property}"]`;
+    let meta = document.querySelector(selector);
+    if (!meta) {
+        meta = document.createElement('meta');
+        if (property.startsWith('og:')) {
+            meta.setAttribute('property', property);
+        } else {
+            meta.setAttribute('name', property);
+        }
+        document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', content);
+}
+
 // 웹사이트 초기화
 function initializeWebsite() {
+    injectWeddingData(); // 데이터 주입을 가장 먼저 실행
     initFontLoading(); // 폰트 로딩 최적화 (iOS Safari)
     initImagePreloading(); // 이미지 프리로딩을 가장 먼저 실행
     initKakao(); // 카카오 SDK 초기화
@@ -106,56 +330,34 @@ function initFontLoading() {
     }
 }
 
-// 이미지 프리로딩 초기화
+// 이미지 프리로딩 초기화 (정적 페이지 버전)
 function initImagePreloading() {
     console.log('🖼️ 이미지 프리로딩 시작...');
     
-    // 서버에서 이미지 목록 가져오기
-    fetch(`/api/image_urls${invitationSlug ? '?slug=' + encodeURIComponent(invitationSlug) : ''}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const serverImageUrls = data.images || [];
-                const pageImageUrls = collectAllImageUrls();
-                
-                // 서버 이미지와 페이지 이미지 합치기 (중복 제거)
-                const allImageUrls = [...new Set([...serverImageUrls, ...pageImageUrls])];
-                
-                totalImagesToPreload = allImageUrls.length;
-                
-                if (totalImagesToPreload === 0) {
-                    console.log('프리로드할 이미지가 없습니다.');
-                    return;
-                }
-                
-                console.log(`🚀 총 ${totalImagesToPreload}개 이미지 프리로딩 시작`);
-                
-                // 로딩 인디케이터 표시
-                showLoadingIndicator();
-                
-                // 이미지 프리로딩 시작
-                preloadImages(allImageUrls);
-            } else {
-                console.warn('서버에서 이미지 목록을 가져오지 못했습니다. 페이지 이미지만 프리로딩합니다.');
-                // 서버 요청 실패 시 페이지 이미지만 프리로딩
-                const pageImageUrls = collectAllImageUrls();
-                if (pageImageUrls.length > 0) {
-                    totalImagesToPreload = pageImageUrls.length;
-                    showLoadingIndicator();
-                    preloadImages(pageImageUrls);
-                }
-            }
-        })
-        .catch(error => {
-            console.error('이미지 목록 가져오기 실패:', error);
-            // 네트워크 오류 시 페이지 이미지만 프리로딩
-            const pageImageUrls = collectAllImageUrls();
-            if (pageImageUrls.length > 0) {
-                totalImagesToPreload = pageImageUrls.length;
-                showLoadingIndicator();
-                preloadImages(pageImageUrls);
+    // 정적 페이지에서는 페이지 이미지만 프리로딩
+    const pageImageUrls = collectAllImageUrls();
+    
+    // wedding-data.js에서 갤러리 이미지 추가
+    if (typeof weddingData !== 'undefined' && weddingData.gallery_images) {
+        weddingData.gallery_images.forEach(img => {
+            if (!pageImageUrls.includes(img)) {
+                pageImageUrls.push(img);
             }
         });
+    }
+    
+    if (pageImageUrls.length > 0) {
+        totalImagesToPreload = pageImageUrls.length;
+        console.log(`🚀 총 ${totalImagesToPreload}개 이미지 프리로딩 시작`);
+        
+        // 로딩 인디케이터 표시
+        showLoadingIndicator();
+        
+        // 이미지 프리로딩 시작
+        preloadImages(pageImageUrls);
+    } else {
+        console.log('프리로드할 이미지가 없습니다.');
+    }
 }
 
 // 페이지의 모든 이미지 URL 수집
@@ -508,48 +710,29 @@ function initRsvp() {
             return;
         }
 
-        const payload = {
-            side,
-            name,
-            attendees,
-            companion,
-            meal,
-            slug: invitationSlug
-        };
-
-        fetch('/api/rsvp', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showRsvpFeedback('참석 의사가 전달되었습니다. 감사합니다!', true);
-                form.reset();
-                const attendeesInput = form.querySelector('#rsvp-attendees');
-                if (attendeesInput) {
-                    attendeesInput.value = '1';
-                }
-                setTimeout(() => {
-                    closeRsvpModal();
-                }, 1200);
-            } else {
-                showRsvpFeedback(data.message || '전송 중 문제가 발생했습니다.', false);
-            }
-        })
-        .catch(error => {
-            console.error('RSVP 전송 오류:', error);
-            showRsvpFeedback('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', false);
-        })
-        .finally(() => {
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.textContent = '참석 의사 전달하기';
-            }
-        });
+        // 정적 페이지에서는 서버 API가 없으므로 연락처 정보를 표시
+        const contacts = typeof weddingData !== 'undefined' ? weddingData.contacts : null;
+        let contactInfo = '';
+        
+        if (side === 'groom' && contacts && contacts.groom) {
+            contactInfo = `신랑측: ${contacts.groom.name} (${contacts.groom.phone})`;
+        } else if (side === 'bride' && contacts && contacts.bride) {
+            contactInfo = `신부측: ${contacts.bride.name} (${contacts.bride.phone})`;
+        }
+        
+        const message = `정적 페이지에서는 참석 의사를 자동으로 전달할 수 없습니다.\n\n${contactInfo ? contactInfo + '로 직접 연락 부탁드립니다.' : '연락처로 직접 연락 부탁드립니다.'}\n\n입력하신 정보:\n- 성함: ${name}\n- 참석 인원: ${attendees}명${companion ? '\n- 동행인: ' + companion : ''}\n- 식사 여부: ${meal === 'planned' ? '예정' : meal === 'not_planned' ? '미예정' : '미정'}`;
+        
+        showRsvpFeedback(message, false);
+        
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '참석 의사 전달하기';
+        }
+        
+        // 5초 후 모달 닫기
+        setTimeout(() => {
+            closeRsvpModal();
+        }, 5000);
     });
 
     function showRsvpFeedback(message, isSuccess) {
@@ -565,20 +748,18 @@ function initRsvp() {
     }
 }
 
-// 방명록 로드
+// 방명록 로드 (정적 페이지 버전)
 function loadGuestbook() {
-    fetch(`/api/guestbook${invitationSlug ? '?slug=' + encodeURIComponent(invitationSlug) : ''}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                displayGuestbook(data.data);
-            } else {
-                console.error('방명록 로드 실패:', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('방명록 로드 오류:', error);
-        });
+    // 정적 페이지에서는 서버가 없으므로 빈 방명록 표시
+    const guestbookComments = document.getElementById('guestbook-comments');
+    if (guestbookComments) {
+        guestbookComments.innerHTML = `
+            <div class="empty-message" style="text-align: center; padding: 40px; color: #999;">
+                정적 페이지에서는 방명록 기능을 사용할 수 없습니다.<br>
+                연락처로 직접 축하 메시지를 전달해주세요! 💝
+            </div>
+        `;
+    }
 }
 
 // 방명록 표시
@@ -1138,65 +1319,14 @@ function submitGuestbook() {
         return;
     }
     
-    // 서버에 전송
-    fetch('/api/guestbook', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: name,
-            message: message,
-            password: password,
-            slug: invitationSlug
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            closeGuestbookModal();
-            loadGuestbook(); // 방명록 새로고침
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => {
-        console.error('방명록 작성 오류:', error);
-        alert('방명록 작성 중 오류가 발생했습니다.');
-    });
+    // 정적 페이지에서는 서버가 없으므로 경고 메시지 표시
+    alert('정적 페이지에서는 방명록을 저장할 수 없습니다.\n\n연락처로 직접 축하 메시지를 전달해주세요!');
+    closeGuestbookModal();
 }
 
 function deleteGuestbookEntry(entryId) {
-    const password = prompt('삭제하려면 작성 시 입력한 비밀번호를 입력해주세요:');
-    
-    if (!password) {
-        return;
-    }
-    
-    fetch(`/api/guestbook/${entryId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            password: password,
-            slug: invitationSlug
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            loadGuestbook(); // 방명록 새로고침
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => {
-        console.error('방명록 삭제 오류:', error);
-        alert('방명록 삭제 중 오류가 발생했습니다.');
-    });
+    // 정적 페이지에서는 방명록 삭제 기능 없음
+    alert('정적 페이지에서는 방명록 삭제 기능을 사용할 수 없습니다.');
 }
 
 // 화환 보내기 링크 이동
