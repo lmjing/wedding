@@ -761,7 +761,10 @@ function initGallery() {
 
       const item = document.createElement("div");
       item.className = "item";
-      item.setAttribute("onclick", `openImageModal('${imagePath}')`);
+      item.onclick = function () {
+        openImageModal(imagePath);
+      };
+      // item.setAttribute("onclick", `openImageModal('${imagePath}')`);
 
       // 기본 스타일 설정 (높이 명시)
       item.style.cssText = `
@@ -1558,9 +1561,7 @@ function showFlowerModal() {
 // 이미지 모달 열기 (갤러리 스와이프 모달)
 function openImageModal(imageSrc) {
   // 모든 갤러리 이미지 수집
-  const galleryItems = document.querySelectorAll(
-    ".gallery-grid .grid-item .item"
-  );
+  const galleryItems = document.querySelectorAll(".gallery-grid .item");
   const galleryImages = [];
 
   galleryItems.forEach((item) => {
@@ -1570,6 +1571,7 @@ function openImageModal(imageSrc) {
       galleryImages.push(urlMatch[1]);
     }
   });
+  console.log("galleryItems", galleryItems);
 
   if (galleryImages.length === 0) return;
 
@@ -1578,6 +1580,7 @@ function openImageModal(imageSrc) {
   let currentImageIndex = currentIndex >= 0 ? currentIndex : 0;
 
   // 갤러리 스와이프 모달 생성
+  console.log("갤러리 스와이프 모달 생성");
   const modal = document.createElement("div");
   modal.className = "modal-mask gallery-swipe-modal";
   modal.innerHTML = `
