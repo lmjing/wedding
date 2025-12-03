@@ -228,7 +228,7 @@ function injectWeddingData() {
   if (messages.outro_message) {
     const outroEl = document.querySelector(".c-outro-text.center div");
     if (outroEl)
-      outroEl.textContent = messages.outro_message.replace(/\n/g, "<br>");
+      outroEl.innerHTML = messages.outro_message.replace(/\n/g, "</br>");
   }
 
   // 마무리 이미지

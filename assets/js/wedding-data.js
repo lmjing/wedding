@@ -30,9 +30,9 @@ const weddingData = {
 
   // 이미지 경로
   images: {
-    main_photo: "assets/images/20250918_225238_2.png",
+    main_photo: "assets/images/gallery_webp/11_main.webp",
     invitation_photo: "", // 초대장 사진 (필요시 입력)
-    outro_photo: "", // 마무리 사진 (필요시 입력)
+    outro_photo: "assets/images/gallery_webp/11_main.webp", // 마무리 사진 (필요시 입력)
   },
 
   // 교통 정보
@@ -44,7 +44,7 @@ const weddingData = {
 
   // 지도 설정
   map_settings: {
-    mapImage: "assets/images/1758211532_map.png", // 지도 이미지 경로
+    mapImage: "assets/images/location_new.jpg", // 지도 이미지 경로
     subwayInfo: "", // 지하철 정보 (필요시 입력)
     busInfo: "", // 버스 정보 (필요시 입력)
     parkingInfo: "", // 주차 정보 (필요시 입력)
