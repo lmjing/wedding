@@ -753,7 +753,7 @@ button {
 
 .mcard-intro .photo {
   line-height: 0;
-  height: 462.16px;
+  height: 462px;
 }
 
 .mcard-intro .photo img {
@@ -842,6 +842,17 @@ button {
   position: relative;
   overflow: hidden;
   line-height: 0;
+  opacity: 0;
+  animation: fadeInOpacity 0.8s ease-in-out forwards;
+}
+
+@keyframes fadeInOpacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .intro-blend-image {
@@ -867,8 +878,8 @@ button {
 }
 
 .gradient-none {
-  -webkit-mask-image: linear-gradient(180deg, #000, #000);
-  mask-image: linear-gradient(180deg, #000, #000);
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 /* 문단 래퍼 */
