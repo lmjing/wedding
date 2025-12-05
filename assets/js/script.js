@@ -293,10 +293,10 @@ function initializeWebsite() {
   initImagePreloading(); // 이미지 프리로딩을 가장 먼저 실행
   initKakao(); // 카카오 SDK 초기화
   initCountdown();
-  initGallery();
+  // initGallery(); // 불필요하면 삭제
   // initGuestbook();
   //   initRsvp();
-  initFadeInAnimation();
+  // initFadeInAnimation(); // 불필요하면 삭제
   initVideoAutoplay(); // 영상 자동 재생 초기화
   initAudio();
   initIntroVideo();
@@ -666,7 +666,7 @@ function initVideoAutoplay() {
 
 // 카운트다운 초기화
 function initCountdown() {
-  const weddingDate = new Date("2026-01-18 11:30:00");
+  const weddingDate = new Date("2026-02-21 16:00:00");
 
   countdownInterval = setInterval(function () {
     const now = new Date();
@@ -715,12 +715,12 @@ function updateCountdownDisplay(days, hours, minutes, seconds) {
   const ddayText = document.getElementById("dday-text");
   if (ddayText && days > 0) {
     ddayText.innerHTML = `
-            <span>승재 <span style="color:#ea7664">♥</span> 수빈의 결혼식이 </span>
+            <span>혁재 <span style="color:#ea7664">♥</span> 진주의 결혼식이 </span>
             <span><span style="color:#ea7664">${days}일</span> <span>남았습니다.</span></span>
         `;
   } else if (ddayText && days === 0) {
     ddayText.innerHTML = `
-            <span>승재 <span style="color:#ea7664">♥</span> 수빈의 결혼식이 </span>
+            <span>혁재 <span style="color:#ea7664">♥</span> 진주의 결혼식이 </span>
             <span><span style="color:#ea7664">오늘</span> <span>입니다!</span></span>
         `;
   }
@@ -1055,7 +1055,11 @@ function initFadeInAnimation() {
   // fade-in-up 초기화 (갤러리 제외)
   document.querySelectorAll(".fade-in-up").forEach((el) => {
     // 갤러리 요소는 옵저버에서 제외하고 즉시 표시
-    if (el.closest(".gallery-container") || el.closest(".gallery-grid")) {
+    if (
+      el.closest(".gallery-container") ||
+      el.closest(".gallery-grid") ||
+      el.closest(".gallery-item")
+    ) {
       el.style.opacity = "1";
       el.style.transform = "translateY(0)";
       el.style.transition = "none";
@@ -1348,15 +1352,34 @@ function showTab(index) {
       case 0: // 식사안내
         content = `
                     <div class="content ntab-panel active">
-                        <div class="text">예식 후 식사를 준비하였습니다.<br>맛있는 식사와 함께<br>즐거운 시간 보내시기 바랍니다.<br><br>• 식사 시간: 오전 11시~<br>• 장소: 동일 건물 3층 
-JK가든 연회장</div>
+                        <div class="text">
+                        예식 후 식사를 준비하였습니다.<br>
+                        맛있는 식사와 함께<br>
+                        즐거운 시간 보내시기 바랍니다.<br><br>
+                        • 위치: 건물 내 연회장<br>
+                        • 식사 시간: 15:15 ~ 17:45<br>
+                        • 만 6세 미만 유아는 식권 없이 식사 가능합니다.<br>
+                        </div>
                     </div>
                 `;
         break;
       case 1: // 주차안내
         content = `
                     <div class="content ntab-panel active">
-                        <div class="text">SK리더스뷰 지하주차장을 이용해 주세요.<br><br>• 주차장 위치: B3층<br>• 무료주차: 2시간<br>• 주차권 수령: 안내데스크<br><br>대중교통 이용을 권장드립니다.</div>
+                        <div class="text">
+                        컨벤션 지하주차장을 이용해주세요.<br>
+                        • 하객 무료주차: 2시간<br>
+                        • 초과 30분당 1,500원<br><br>
+                        
+                        만차시, 맞은편 전쟁기념관에<br>
+                        주차 안내를 해드리고 있습니다.<br><br>
+                        • 주차할인: 안내문 제출 및 차량등록 필수<br>
+                        • 등록 위치: 컨벤션 안내데스크<br>
+                        • 안내문 위치: 컨벤션 주차장 입구<br>
+                        • 만차시에만 주차 할인 가능<br><br>
+
+                        대중교통 이용을 권장드립니다.
+                        </div>
                     </div>
                 `;
         break;
@@ -1879,7 +1902,7 @@ function initKakao() {
 async function shareKakao() {
   console.log("📱 카카오톡 공유 시도...");
 
-  const title = "백승재 ♥ 최수빈 결혼합니다";
+  const title = "백혁재 ♥ 최진주 결혼합니다";
   const desc = "1월 18일 오전 11시 30분\n문래역 JK아트컨벤션 4층 그랜드홀";
   const url = window.location.href;
 

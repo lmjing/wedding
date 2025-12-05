@@ -1492,7 +1492,7 @@ body.fonts-loaded {
 }
 
 .waytocome-wrap .content {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   line-height: 1.3rem;
   text-align: left;
   margin: 0;
@@ -1502,7 +1502,7 @@ body.fonts-loaded {
 .waytocome-wrap .content > * {
   margin: 0;
   padding: 0;
-  white-space: pre-wrap;
+  white-space: normal;
 }
 
 .waytocome-wrap .content p {
@@ -1904,11 +1904,12 @@ body.fonts-loaded {
 
 /* 탭 기본 스타일 */
 .ntab {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   line-height: 1.7rem;
 }
 
 .ntab > .titles {
+  font-size: 0.9rem;
   display: flex;
 }
 

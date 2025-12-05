@@ -4,9 +4,9 @@
 const weddingData = {
   // 기본 정보
   wedding_info: {
-    groom_name: "승재",
-    bride_name: "수빈",
-    wedding_date: "2026.01.18",
+    groom_name: "혁재",
+    bride_name: "진주",
+    wedding_date: "2026.02.21",
     wedding_time: "일요일 오전 11시 30분",
     wedding_venue: "문래역 SK리더스뷰 4층 JK아트컨벤션",
     wedding_address: "문래동3가 55-16",
@@ -14,10 +14,10 @@ const weddingData = {
 
   // 가족 정보
   family_info: {
-    groom_father: "故백종두",
-    groom_mother: "안미혜",
-    bride_father: "최재규",
-    bride_mother: "황동열",
+    groom_father: "권오쥰",
+    groom_mother: "심성희",
+    bride_father: "배명규",
+    bride_mother: "김숙향",
   },
 
   // 메시지
@@ -30,9 +30,9 @@ const weddingData = {
 
   // 이미지 경로
   images: {
-    main_photo: "assets/images/gallery_webp/11_main.webp",
+    main_photo: "assets/images/main.webp",
     invitation_photo: "", // 초대장 사진 (필요시 입력)
-    outro_photo: "assets/images/gallery_webp/11_main.webp", // 마무리 사진 (필요시 입력)
+    outro_photo: "assets/images/last2.webp", // 마무리 사진 (필요시 입력)
   },
 
   // 교통 정보
@@ -54,21 +54,36 @@ const weddingData = {
   account_info: {
     groom_accounts: [
       {
-        bank: "신한",
-        number: "110-407-470751",
-        name: "백승재",
+        bank: "하나",
+        number: "355-910263-14507 ",
+        name: "권혁재",
+      },
+      {
+        bank: "농협",
+        number: "302-0737-6647-91",
+        name: "권오쥰",
+      },
+      {
+        bank: "새마을금고",
+        number: "9003-2988-5045-3",
+        name: "심성희",
       },
     ],
     bride_accounts: [
       {
-        bank: "국민",
-        number: "200123-45-678900",
-        name: "최수빈",
+        bank: "카카오뱅크",
+        number: "3333-35-7148524",
+        name: "배진주",
       },
       {
-        bank: "신한",
-        number: "110-123-456789",
-        name: "최수빈",
+        bank: "농협",
+        number: "352-2066-2611-03",
+        name: "배명구",
+      },
+      {
+        bank: "국민",
+        number: "247901-04-378659",
+        name: "김숙향",
       },
     ],
   },
@@ -76,32 +91,44 @@ const weddingData = {
   // 연락처 정보
   contacts: {
     groom: {
-      name: "이미정",
-      phone: "010-4905-9020",
+      name: "권혁재",
+      phone: "010-2114-7883",
     },
     bride: {
-      name: "이미정",
-      phone: "010-4905-9020",
+      name: "배진주",
+      phone: "010-5140-3725",
     },
   },
 
   // 갤러리 이미지 (배열)
   gallery_images: [
-    "assets/images/20250918_225238_2.png",
-    "assets/images/20250918_225238_2.png",
-    "assets/images/20250918_225238_2.png",
-    "assets/images/20250918_225238_2.png",
-    "assets/images/gallery_webp/1.jpg",
-    "assets/images/gallery_webp/2.jpg",
-    "assets/images/gallery_webp/3.jpg",
-    // "assets/images/gallery_webp/20250918_004953_05_CJG00205-.webp",
-    // "assets/images/gallery_webp/20250918_005020_08_CJG00583-.webp",
-    // "assets/images/gallery_webp/20250918_011644_12_CJG01164-.webp",
-    // "assets/images/gallery_webp/20250918_011652_14_CJG01310-.webp",
-    // "assets/images/gallery_webp/20250918_011658_22_CJG01695-.webp",
-    // "assets/images/gallery_webp/20250918_011702_24_CJG01721-.webp",
-    // "assets/images/gallery_webp/20250918_235444_IMG_3173.webp",
-    // "assets/images/gallery_webp/20250919_074549_1754745093144.webp",
+    "assets/images/gallery_webp/01.webp",
+    "assets/images/gallery_webp/02.webp",
+    "assets/images/gallery_webp/03.webp",
+    "assets/images/gallery_webp/04.webp",
+    "assets/images/gallery_webp/05.webp",
+    "assets/images/gallery_webp/06.webp",
+    "assets/images/gallery_webp/07.webp",
+    "assets/images/gallery_webp/08.webp",
+    "assets/images/gallery_webp/09.webp",
+    "assets/images/gallery_webp/10.webp",
+    "assets/images/gallery_webp/11_main.webp",
+    "assets/images/gallery_webp/12.webp",
+    "assets/images/gallery_webp/13.webp",
+    "assets/images/gallery_webp/14.webp",
+    "assets/images/gallery_webp/15.webp",
+    "assets/images/gallery_webp/16.webp",
+    "assets/images/gallery_webp/17.webp",
+    "assets/images/gallery_webp/18.webp",
+    "assets/images/gallery_webp/19.webp",
+    "assets/images/gallery_webp/20.webp",
+    "assets/images/gallery_webp/21.webp",
+    "assets/images/gallery_webp/22.webp",
+    "assets/images/gallery_webp/23.webp",
+    "assets/images/gallery_webp/24.webp",
+    "assets/images/gallery_webp/25.webp",
+    "assets/images/gallery_webp/26.webp",
+    "assets/images/gallery_webp/27.webp",
   ],
 
   // 메타 정보
@@ -111,7 +138,7 @@ const weddingData = {
 
   // 배경음악 설정
   audio: {
-    background_music: "assets/audio/love.mp3", // 배경음악 파일 경로 (예: 'assets/audio/wedding-song.mp3')
+    background_music: "assets/audio/up_ost.mp3", // 배경음악 파일 경로 (예: 'assets/audio/wedding-song.mp3')
     autoplay: true, // 자동 재생 여부
     loop: true, // 반복 재생 여부
     volume: 0.3, // 볼륨 (0.0 ~ 1.0, 0.3 = 30%)
