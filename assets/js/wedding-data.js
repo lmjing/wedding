@@ -144,17 +144,3 @@ const weddingData = {
     volume: 0.3, // 볼륨 (0.0 ~ 1.0, 0.3 = 30%)
   },
 };
-
-// 페이지 제목과 설명 생성
-function generatePageTitle() {
-  return `${weddingData.wedding_info.groom_name} ♥ ${weddingData.wedding_info.bride_name} 결혼합니다`;
-}
-
-function generatePageDescription() {
-  const info = weddingData.wedding_info;
-  const parts = [];
-  if (info.wedding_date) parts.push(info.wedding_date);
-  if (info.wedding_time) parts.push(info.wedding_time);
-  if (info.wedding_venue) parts.push(info.wedding_venue);
-  return parts.join(" ") || generatePageTitle();
-}

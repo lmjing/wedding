@@ -62,21 +62,6 @@ function injectWeddingData() {
   const accounts = data.account_info;
   const contacts = data.contacts;
 
-  // 페이지 제목 및 메타 정보
-  const pageTitle = generatePageTitle();
-  const pageDescription = generatePageDescription();
-  const ogImage =
-    data.meta.thumbnail || images.main_photo || "assets/images/main.png";
-
-  document.title = pageTitle;
-  updateMetaTag("og:title", pageTitle);
-  updateMetaTag("og:site_name", pageTitle);
-  updateMetaTag("og:description", pageDescription);
-  updateMetaTag("og:image", ogImage);
-  updateMetaTag("twitter:title", pageTitle);
-  updateMetaTag("twitter:description", pageDescription);
-  updateMetaTag("twitter:image", ogImage);
-
   // 신랑/신부 이름
   updateTextContent(".groom", info.groom_name);
   updateTextContent(".bride", info.bride_name);
