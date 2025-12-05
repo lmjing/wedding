@@ -423,6 +423,11 @@ button {
 .fade-in {
   transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-sizing: border-box;
+  opacity: 0;
+  transform: translate(0px, 30px);
+}
+
+.fade-in.animated {
   opacity: 1;
   transform: translate(0px, 0px);
 }
@@ -430,24 +435,44 @@ button {
 /* 다양한 페이드 인 효과 */
 .fade-in-up {
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.fade-in-up.animated {
   opacity: 1;
   transform: translateY(0);
 }
 
 .fade-in-left {
   transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.fade-in-left.animated {
   opacity: 1;
   transform: translateX(0);
 }
 
 .fade-in-right {
   transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.fade-in-right.animated {
   opacity: 1;
   transform: translateX(0);
 }
 
 .fade-in-scale {
   transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.fade-in-scale.animated {
   opacity: 1;
   transform: scale(1);
 }
@@ -468,6 +493,11 @@ button {
 /* 부드러운 스프링 효과 */
 .fade-in-spring {
   transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0;
+  transform: translateY(40px) scale(0.9);
+}
+
+.fade-in-spring.animated {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
@@ -1229,13 +1259,32 @@ body.fonts-loaded {
   box-sizing: border-box;
   cursor: pointer;
   /* 갤러리 재로딩 방지 */
-  opacity: 1 !important;
   visibility: visible !important;
   display: block !important;
   will-change: auto;
   contain: none;
-  transform: none;
   backface-visibility: visible;
+}
+
+/* 갤러리 요소들의 fade-in 애니메이션 지원 */
+.gallery-grid .grid-item.fade-in-up {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.gallery-grid .grid-item.fade-in-up.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-container.fade-in-scale {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.gallery-container.fade-in-scale.animated {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .gallery-more-button {
@@ -2470,7 +2519,7 @@ body.fonts-loaded {
   height: 100%;
   padding: 0 1.8rem;
   color: #fff;
-  text-shadow: 1px 1px 30px #000;
+  text-shadow: 1px 1px 2px #000;
   overflow: hidden;
   white-space: pre-wrap;
   display: flex;

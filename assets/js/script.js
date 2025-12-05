@@ -290,7 +290,7 @@ function initializeWebsite() {
   // initGallery(); // 불필요하면 삭제
   // initGuestbook();
   //   initRsvp();
-  // initFadeInAnimation(); // 불필요하면 삭제
+  initFadeInAnimation(); // 페이드인 애니메이션 초기화
   initVideoAutoplay(); // 영상 자동 재생 초기화
   initAudio();
   initIntroVideo();
@@ -992,138 +992,54 @@ function initFadeInAnimation() {
       if (entry.isIntersecting) {
         const element = entry.target;
 
-        // 기본 fade-in
-        if (element.classList.contains("fade-in")) {
-          element.style.opacity = "1";
-          element.style.transform = "translate(0px, 0px)";
-        }
-
-        // fade-in-up
-        if (element.classList.contains("fade-in-up")) {
-          element.style.opacity = "1";
-          element.style.transform = "translateY(0)";
-        }
-
-        // fade-in-left
-        if (element.classList.contains("fade-in-left")) {
-          element.style.opacity = "1";
-          element.style.transform = "translateX(0)";
-        }
-
-        // fade-in-right
-        if (element.classList.contains("fade-in-right")) {
-          element.style.opacity = "1";
-          element.style.transform = "translateX(0)";
-        }
-
-        // fade-in-scale
-        if (element.classList.contains("fade-in-scale")) {
-          element.style.opacity = "1";
-          element.style.transform = "scale(1)";
-        }
-
-        // fade-in-spring
-        if (element.classList.contains("fade-in-spring")) {
-          element.style.opacity = "1";
-          element.style.transform = "translateY(0) scale(1)";
+        // animated 클래스 추가로 CSS transition 트리거
+        if (!element.classList.contains("animated")) {
+          element.classList.add("animated");
         }
       }
     });
   }, observerOptions);
 
-  // 기본 fade-in 초기화 (갤러리 제외)
-  document.querySelectorAll(".fade-in").forEach((el) => {
-    // 갤러리 요소는 옵저버에서 제외하고 즉시 표시
-    if (el.closest(".gallery-container") || el.closest(".gallery-grid")) {
-      el.style.opacity = "1";
-      el.style.transform = "translate(0px, 0px)";
-      el.style.transition = "none";
-      el.style.animation = "none";
-      return;
-    }
-    el.style.opacity = "0";
-    el.style.transform = "translate(0px, 30px)";
-    observer.observe(el);
+  // 모든 fade-in 요소 초기화 및 인라인 스타일 제거
+  const fadeInSelectors = [
+    ".fade-in",
+    ".fade-in-up",
+    ".fade-in-left",
+    ".fade-in-right",
+    ".fade-in-scale",
+    ".fade-in-spring",
+  ];
+
+  fadeInSelectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      // 갤러리 관련 요소의 인라인 스타일 제거
+      if (
+        el.closest(".gallery-container") ||
+        el.closest(".gallery-grid") ||
+        el.classList.contains("gallery-container") ||
+        el.classList.contains("grid-item")
+      ) {
+        el.style.removeProperty("opacity");
+        el.style.removeProperty("transform");
+      }
+      observer.observe(el);
+    });
   });
 
-  // fade-in-up 초기화 (갤러리 제외)
-  document.querySelectorAll(".fade-in-up").forEach((el) => {
-    // 갤러리 요소는 옵저버에서 제외하고 즉시 표시
-    if (
-      el.closest(".gallery-container") ||
-      el.closest(".gallery-grid") ||
-      el.closest(".gallery-item")
-    ) {
-      el.style.opacity = "1";
-      el.style.transform = "translateY(0)";
-      el.style.transition = "none";
-      el.style.animation = "none";
-      return;
-    }
-    el.style.opacity = "0";
-    el.style.transform = "translateY(50px)";
-    observer.observe(el);
-  });
+  // 페이지 로드 시 이미 화면에 보이는 요소들 즉시 애니메이션
+  setTimeout(() => {
+    const allFadeElements = document.querySelectorAll(
+      ".fade-in, .fade-in-up, .fade-in-left, .fade-in-right, .fade-in-scale, .fade-in-spring"
+    );
+    allFadeElements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
 
-  // fade-in-left 초기화 (갤러리 제외)
-  document.querySelectorAll(".fade-in-left").forEach((el) => {
-    // 갤러리 요소는 옵저버에서 제외하고 즉시 표시
-    if (el.closest(".gallery-container") || el.closest(".gallery-grid")) {
-      el.style.opacity = "1";
-      el.style.transform = "translateX(0)";
-      el.style.transition = "none";
-      el.style.animation = "none";
-      return;
-    }
-    el.style.opacity = "0";
-    el.style.transform = "translateX(-50px)";
-    observer.observe(el);
-  });
-
-  // fade-in-right 초기화 (갤러리 제외)
-  document.querySelectorAll(".fade-in-right").forEach((el) => {
-    // 갤러리 요소는 옵저버에서 제외하고 즉시 표시
-    if (el.closest(".gallery-container") || el.closest(".gallery-grid")) {
-      el.style.opacity = "1";
-      el.style.transform = "translateX(0)";
-      el.style.transition = "none";
-      el.style.animation = "none";
-      return;
-    }
-    el.style.opacity = "0";
-    el.style.transform = "translateX(50px)";
-    observer.observe(el);
-  });
-
-  // fade-in-scale 초기화 (갤러리 제외)
-  document.querySelectorAll(".fade-in-scale").forEach((el) => {
-    // 갤러리 요소는 옵저버에서 제외하고 즉시 표시
-    if (el.closest(".gallery-container") || el.closest(".gallery-grid")) {
-      el.style.opacity = "1";
-      el.style.transform = "scale(1)";
-      el.style.transition = "none";
-      el.style.animation = "none";
-      return;
-    }
-    el.style.opacity = "0";
-    el.style.transform = "scale(0.8)";
-    observer.observe(el);
-  });
-
-  // fade-in-spring 초기화 (갤러리 제외)
-  document.querySelectorAll(".fade-in-spring").forEach((el) => {
-    // 갤러리 요소는 옵저버에서 제외하고 즉시 표시
-    if (el.closest(".gallery-container") || el.closest(".gallery-grid")) {
-      el.style.opacity = "1";
-      el.style.transform = "translateY(0) scale(1)";
-      el.style.transition = "none";
-      el.style.animation = "none";
-      return;
-    }
-    el.style.opacity = "0";
-    el.style.transform = "translateY(40px) scale(0.9)";
-    observer.observe(el);
-  });
+      if (isVisible && !el.classList.contains("animated")) {
+        el.classList.add("animated");
+      }
+    });
+  }, 100);
 }
 
 // 오디오 초기화
