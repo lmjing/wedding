@@ -7,9 +7,9 @@ const weddingData = {
     groom_name: "혁재",
     bride_name: "진주",
     wedding_date: "2026.02.21",
-    wedding_time: "일요일 오전 11시 30분",
-    wedding_venue: "문래역 SK리더스뷰 4층 JK아트컨벤션",
-    wedding_address: "문래동3가 55-16",
+    wedding_time: "토요일 오후 16시 00분",
+    wedding_venue: "용산 국방컨벤션 1층 에메랄드홀",
+    wedding_address: "서울 용산구 이태원로 22",
   },
 
   // 가족 정보

@@ -2907,21 +2907,21 @@ body.fonts-loaded {
 
 .gallery-modal-indicator {
   display: flex;
-  gap: 8px;
   margin-top: 20px;
   justify-content: center;
 }
 
-.gallery-modal-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
+.gallery-modal-indicator-text {
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
-.gallery-modal-dot.active {
-  background: var(--icon-color, #ea7664);
+.gallery-modal-indicator-text .current {
+  color: var(--icon-color, #ea7664);
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .gallery-modal-close {

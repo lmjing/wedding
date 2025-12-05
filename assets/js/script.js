@@ -4,6 +4,37 @@ let preloadedImages = new Map(); // 프리로드된 이미지 캐시
 let preloadingProgress = 0;
 let totalImagesToPreload = 0;
 
+// 전체 갤러리 이미지 배열 (모달에서 항상 전체 이미지를 표시하기 위해)
+const ALL_GALLERY_IMAGES = [
+  "assets/images/gallery_webp/01.webp",
+  "assets/images/gallery_webp/02.webp",
+  "assets/images/gallery_webp/03.webp",
+  "assets/images/gallery_webp/04.webp",
+  "assets/images/gallery_webp/05.webp",
+  "assets/images/gallery_webp/06.webp",
+  "assets/images/gallery_webp/07.webp",
+  "assets/images/gallery_webp/08.webp",
+  "assets/images/gallery_webp/09.webp",
+  "assets/images/gallery_webp/10.webp",
+  "assets/images/gallery_webp/11_main.webp",
+  "assets/images/gallery_webp/12.webp",
+  "assets/images/gallery_webp/13.webp",
+  "assets/images/gallery_webp/14.webp",
+  "assets/images/gallery_webp/15.webp",
+  "assets/images/gallery_webp/16.webp",
+  "assets/images/gallery_webp/17.webp",
+  "assets/images/gallery_webp/18.webp",
+  "assets/images/gallery_webp/19.webp",
+  "assets/images/gallery_webp/20.webp",
+  "assets/images/gallery_webp/21.webp",
+  "assets/images/gallery_webp/22.webp",
+  "assets/images/gallery_webp/23.webp",
+  "assets/images/gallery_webp/24.webp",
+  "assets/images/gallery_webp/25.webp",
+  "assets/images/gallery_webp/26.webp",
+  "assets/images/gallery_webp/27.webp",
+];
+
 const invitationSlug =
   window.location.pathname.split("/").filter(Boolean)[0] || "";
 
@@ -768,36 +799,8 @@ function initGallery() {
     return;
   }
 
-  // gallery_webp 폴더의 모든 이미지 파일 목록
-  const galleryImages = [
-    "assets/images/gallery_webp/01.webp",
-    "assets/images/gallery_webp/02.webp",
-    "assets/images/gallery_webp/03.webp",
-    "assets/images/gallery_webp/04.webp",
-    "assets/images/gallery_webp/05.webp",
-    "assets/images/gallery_webp/06.webp",
-    "assets/images/gallery_webp/07.webp",
-    "assets/images/gallery_webp/08.webp",
-    "assets/images/gallery_webp/09.webp",
-    "assets/images/gallery_webp/10.webp",
-    "assets/images/gallery_webp/11_main.webp",
-    "assets/images/gallery_webp/12.webp",
-    "assets/images/gallery_webp/13.webp",
-    "assets/images/gallery_webp/14.webp",
-    "assets/images/gallery_webp/15.webp",
-    "assets/images/gallery_webp/16.webp",
-    "assets/images/gallery_webp/17.webp",
-    "assets/images/gallery_webp/18.webp",
-    "assets/images/gallery_webp/19.webp",
-    "assets/images/gallery_webp/20.webp",
-    "assets/images/gallery_webp/21.webp",
-    "assets/images/gallery_webp/22.webp",
-    "assets/images/gallery_webp/23.webp",
-    "assets/images/gallery_webp/24.webp",
-    "assets/images/gallery_webp/25.webp",
-    "assets/images/gallery_webp/26.webp",
-    "assets/images/gallery_webp/27.webp",
-  ];
+  // gallery_webp 폴더의 모든 이미지 파일 목록 (전역 변수 사용)
+  const galleryImages = ALL_GALLERY_IMAGES;
 
   console.log(`🖼️ ${galleryImages.length}개의 갤러리 이미지 발견`);
 
@@ -1064,9 +1067,6 @@ function updateGalleryMoreButton() {
 function initGalleryMoreButton() {
   const moreButton = document.getElementById("gallery-more-button");
   if (!moreButton) return;
-
-  const arrowSvg = moreButton.querySelector("svg");
-  const buttonWrapper = moreButton.querySelector("div");
 
   // 버튼 클릭 이벤트
   moreButton.addEventListener("click", function () {
@@ -1749,24 +1749,35 @@ function showFlowerModal() {
 
 // 이미지 모달 열기 (갤러리 스와이프 모달)
 function openImageModal(imageSrc) {
-  // 모든 갤러리 이미지 수집
-  const galleryItems = document.querySelectorAll(".gallery-grid .item");
-  const galleryImages = [];
-
-  galleryItems.forEach((item) => {
-    const bgImage = item.style.backgroundImage;
-    const urlMatch = bgImage.match(/url\(['"]?([^'"]+)['"]?\)/);
-    if (urlMatch && urlMatch[1]) {
-      galleryImages.push(urlMatch[1]);
-    }
-  });
-  console.log("galleryItems", galleryItems);
+  // 항상 전체 갤러리 이미지 배열 사용 (더보기 버튼을 누르지 않아도 모든 이미지 표시)
+  const galleryImages = ALL_GALLERY_IMAGES;
 
   if (galleryImages.length === 0) return;
 
-  // 현재 이미지의 인덱스 찾기
-  const currentIndex = galleryImages.indexOf(imageSrc);
+  // 현재 이미지의 인덱스 찾기 (전체 배열에서)
+  // imageSrc 경로 정규화 및 매칭
+  const normalizePath = (path) =>
+    path.replace(/^\.\//, "").replace(/\/+/g, "/");
+  const normalizedImageSrc = normalizePath(imageSrc);
+
+  const currentIndex = galleryImages.findIndex((img) => {
+    const normalizedImg = normalizePath(img);
+    // 정확한 경로 매칭 또는 파일명으로 매칭
+    return (
+      normalizedImg === normalizedImageSrc ||
+      normalizedImg === imageSrc ||
+      normalizedImg.endsWith(normalizedImageSrc.split("/").pop()) ||
+      normalizedImageSrc.endsWith(normalizedImg.split("/").pop())
+    );
+  });
+
   let currentImageIndex = currentIndex >= 0 ? currentIndex : 0;
+
+  console.log(
+    `갤러리 모달 열기: 전체 ${galleryImages.length}개 이미지, 현재 인덱스: ${
+      currentImageIndex + 1
+    }, 클릭한 이미지: ${imageSrc}`
+  );
 
   // 갤러리 스와이프 모달 생성
   console.log("갤러리 스와이프 모달 생성");
@@ -1805,15 +1816,11 @@ function openImageModal(imageSrc) {
                 
                 <!-- 인디케이터 -->
                 <div class="gallery-modal-indicator">
-                    ${galleryImages
-                      .map(
-                        (_, index) => `
-                        <span class="gallery-modal-dot ${
-                          index === currentImageIndex ? "active" : ""
-                        }" data-index="${index}"></span>
-                    `
-                      )
-                      .join("")}
+                    <span class="gallery-modal-indicator-text">
+                        <span class="current">${currentImageIndex + 1}</span>/${
+    galleryImages.length
+  }
+                    </span>
                 </div>
                 
                 <!-- 닫기 버튼 -->
@@ -1850,7 +1857,6 @@ function navigateGallery(direction) {
   if (!modal) return;
 
   const items = modal.querySelectorAll(".gallery-modal-item");
-  const dots = modal.querySelectorAll(".gallery-modal-dot");
   const currentActive = modal.querySelector(".gallery-modal-item.active");
 
   if (!currentActive) return;
@@ -1866,11 +1872,17 @@ function navigateGallery(direction) {
 
   // 현재 활성 아이템 비활성화
   currentActive.classList.remove("active");
-  dots[currentIndex].classList.remove("active");
 
   // 새 아이템 활성화
   items[newIndex].classList.add("active");
-  dots[newIndex].classList.add("active");
+
+  // 인디케이터 업데이트
+  const indicatorCurrent = modal.querySelector(
+    ".gallery-modal-indicator .current"
+  );
+  if (indicatorCurrent) {
+    indicatorCurrent.textContent = newIndex + 1;
+  }
 }
 
 // 갤러리 모달 스와이프 기능 초기화
@@ -1968,8 +1980,8 @@ function closeModal(modalId) {
 
 // 네이버 지도 열기
 function openNaverMap() {
-  const address = "서울특별시 영등포구 문래동3가 55-16";
-  const placeName = "JK아트컨벤션";
+  const address = "서울 용산구 이태원로 22";
+  const placeName = "국방컨벤션";
   const searchQuery = `${placeName} ${address}`;
   const url = `https://map.naver.com/v5/search/${encodeURIComponent(
     searchQuery
@@ -1979,7 +1991,7 @@ function openNaverMap() {
 
 // 카카오 내비 열기
 function openKakaoNavi() {
-  const address = "서울특별시 영등포구 문래동3가 55-16";
+  const address = "서울 용산구 이태원로 22";
 
   // 모바일에서 카카오내비 앱 실행 시도
   if (
@@ -2010,8 +2022,8 @@ function openKakaoNavi() {
 
 // 티맵 열기
 function openTmap() {
-  const address = "서울특별시 영등포구 문래동3가 55-16";
-  const placeName = "JK아트컨벤션";
+  const address = "서울 용산구 이태원로 22";
+  const placeName = "국방컨벤션";
 
   // 모바일에서 티맵 앱 실행 시도
   if (
@@ -2068,8 +2080,8 @@ function initKakao() {
 async function shareKakao() {
   console.log("📱 카카오톡 공유 시도...");
 
-  const title = "백혁재 ♥ 최진주 결혼합니다";
-  const desc = "1월 18일 오전 11시 30분\n문래역 JK아트컨벤션 4층 그랜드홀";
+  const title = "권혁재 ♥ 배진주 결혼합니다";
+  const desc = "2월 21일 오후 4시\n용산 국방컨벤션 1층 에메랄드홀";
   const url = window.location.href;
 
   try {
@@ -2081,8 +2093,7 @@ async function shareKakao() {
         content: {
           title,
           description: desc,
-          imageUrl:
-            window.location.origin + "/assets/images/20250918_225238_2.png",
+          imageUrl: window.location.origin + "/assets/images/main.png",
           link: { mobileWebUrl: url, webUrl: url },
         },
         buttons: [
@@ -2137,16 +2148,11 @@ function copyLink() {
 function initMap() {
   if (typeof naver !== "undefined") {
     const mapOptions = {
-      center: new naver.maps.LatLng(37.5748439, 126.9790021),
+      center: new naver.maps.LatLng(37.5343495, 126.9784731),
       zoom: 17,
     };
 
     const map = new naver.maps.Map("map", mapOptions);
-
-    const marker = new naver.maps.Marker({
-      position: new naver.maps.LatLng(37.5748439, 126.9790021),
-      map: map,
-    });
   }
 }
 
