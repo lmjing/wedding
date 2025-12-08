@@ -188,7 +188,7 @@ code {
   .greetings-title,
   .location-wrap,
   .account-wrap .inner {
-    max-width: calc(100vw - 20px);
+    max-width: calc(100vw);
     overflow-wrap: break-word;
   }
 
