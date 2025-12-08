@@ -145,7 +145,7 @@ function injectWeddingData() {
 
           div.innerHTML = `
                     <div class="inner">
-                              <span><span class="bank">${account.bank}</span> <span>${account.number}</span></span><br>
+                              <span class="bank-wrap"><span class="bank">${account.bank}</span> <span>${account.number}</span></span><br>
                               <span>${account.name}</span>
                               </div>
                     <div>
@@ -1352,12 +1352,12 @@ function showTab(index) {
                         • 하객 무료주차: 2시간<br>
                         • 초과 30분당 1,500원<br><br>
                         
-                        만차시, 맞은편 전쟁기념관에<br>
+                        만차 시, 맞은편 전쟁기념관에<br>
                         주차 안내를 해드리고 있습니다.<br><br>
                         • 주차할인: 안내문 제출 및 차량등록 필수<br>
                         • 등록 위치: 컨벤션 안내데스크<br>
                         • 안내문 위치: 컨벤션 주차장 입구<br>
-                        • 만차시에만 주차 할인 가능<br><br>
+                        • 만차 시에만 주차 할인 가능<br><br>
 
                         대중교통 이용을 권장드립니다.
                         </div>

@@ -4,11 +4,11 @@
 const weddingData = {
   // 기본 정보
   wedding_info: {
-    groom_name: "혁재",
-    bride_name: "진주",
-    wedding_date: "2026.02.21",
-    wedding_time: "토요일 오후 16시 00분",
-    wedding_venue: "용산 국방컨벤션 1층 에메랄드홀",
+    groom_name: "권혁재",
+    bride_name: "배진주",
+    wedding_date: "우리 결혼해요",
+    wedding_time: "토요일 오후 4시",
+    wedding_venue: "용산 국방컨벤션 1층",
     wedding_address: "서울 용산구 이태원로 22",
   },
 
@@ -16,7 +16,7 @@ const weddingData = {
   family_info: {
     groom_father: "권오쥰",
     groom_mother: "심성희",
-    bride_father: "배명규",
+    bride_father: "배명구",
     bride_mother: "김숙향",
   },
 
